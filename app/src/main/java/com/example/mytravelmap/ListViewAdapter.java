@@ -9,12 +9,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
 
 
-public class ListViewAdapter extends BaseAdapter {
+public class ListViewAdapter extends BaseAdapter{
     // 저장할 데이터
     private ArrayList<ListViewItem> data = new ArrayList<ListViewItem>();
 
@@ -62,9 +63,9 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     // List에 데이터 추가하기
-    public void addData(Drawable img, String title, String content) {
-        ListViewItem item = new ListViewItem(img, title, content);
+    void addData(Drawable img, String title, String content, LatLng latLng) {
+        ListViewItem item = new ListViewItem(img, title, content, latLng);
         data.add(item);
-        System.out.println("add: " +  data.size());
     }
+
 }

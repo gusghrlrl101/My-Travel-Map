@@ -180,8 +180,7 @@ public class MapFragment extends Fragment
         for (int grantResult : grantResults) {
             if (grantResult == PackageManager.PERMISSION_DENIED) {
                 // toast 띄워주기
-                Toast toast = Toast.makeText(getContext(), "위치서비스 허용이 필요합니다. 어플을 종료합니다.", Toast.LENGTH_LONG);
-                toast.show();
+
 
                 allGranted = false;
                 getActivity().finishAffinity();

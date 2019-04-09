@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
@@ -58,16 +59,13 @@ public class MyListFragment extends Fragment {
             }
         });
 
-        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img1), "제목1", "내용1");
-        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img2), "제목2", "내용2");
-        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img3), "제목3", "내용3");
-        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img4), "제목4", "내용4");
-        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img5), "제목5", "내용5");
+        LatLng latLng = new LatLng(132.0,37.0);
+        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img1), "제목1", "내용1", latLng);
+        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img2), "제목2", "내용2", latLng);
+        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img3), "제목3", "내용3", latLng);
+        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img4), "제목4", "내용4", latLng);
+        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img5), "제목5", "내용5", latLng);
 
         return layout;
-    }
-
-    public void addData(Drawable img, Marker marker, String title, String content) {
-        adapter.addData(img, title, content);
     }
 }

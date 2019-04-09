@@ -7,9 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity
-        implements MapFragment.MapInterface {
+        implements MapFragment.MapInterface, MyInterface{
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
+    private MyInterface myInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,12 @@ public class MainActivity extends AppCompatActivity
     public void moveInfo(String id) {
         Intent intent = new Intent(this, AddItemActivity.class);
         intent.putExtra("id", id);
+        intent.putExtra("inteface", myInterface);
         startActivity(intent);
+    }
+
+    @Override
+    public void addData() {
+        System.out.println("@@@@@@@@@@@@@");
     }
 }
