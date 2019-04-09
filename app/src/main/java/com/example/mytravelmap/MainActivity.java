@@ -1,5 +1,6 @@
 package com.example.mytravelmap;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void moveInfo(String id) {
-        mViewPager.setCurrentItem(2, true);
+        Intent intent = new Intent(this, MapsActivity.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
 }
