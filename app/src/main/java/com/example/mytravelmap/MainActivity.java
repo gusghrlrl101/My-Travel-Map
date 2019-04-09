@@ -22,10 +22,6 @@ public class MainActivity extends AppCompatActivity
 
         TabLayout mTab = (TabLayout) findViewById(R.id.tabs);
         mTab.setupWithViewPager(mViewPager);
-
-//        MyListFragment myListFragment = (MyListFragment)getSupportFragmentManager().findFragmentById(R.id.mylist_fragment);
-//        Marker marker=null;
-//        myListFragment.addData(ContextCompat.getDrawable(this, R.drawable.img1), marker, "제목1", "내용1");
     }
 
     @Override
