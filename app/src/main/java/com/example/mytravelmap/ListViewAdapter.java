@@ -62,8 +62,9 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     // List에 데이터 추가하기
-    public void addData(Drawable img, Marker marker, String title, String content) {
-        ListViewItem item = new ListViewItem(img, marker, title, content);
+    public void addData(Drawable img, String title, String content) {
+        ListViewItem item = new ListViewItem(img, title, content);
         data.add(item);
+        System.out.println("add: " +  data.size());
     }
 }

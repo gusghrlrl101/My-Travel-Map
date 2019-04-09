@@ -16,7 +16,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0)
-            return ListFragment.newInstance();
+            return MyListFragment.newInstance();
         else if (position == 1)
             return MapFragment.newInstance();
         else if (position == 2)

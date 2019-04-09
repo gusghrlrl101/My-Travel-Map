@@ -6,14 +6,14 @@ import com.google.android.gms.maps.model.Marker;
 
 public class ListViewItem {
     private Drawable img;
-    private Marker marker;
+//    private Marker marker;
     private String title;
     private String content;
 
     // 생성자
-    public ListViewItem(Drawable img, Marker marker, String title, String content) {
+    public ListViewItem(Drawable img, String title, String content) {
         this.img = img;
-        this.marker = marker;
+//        this.marker = marker;
         this.title = title;
         this.content = content;
     }
@@ -23,9 +23,9 @@ public class ListViewItem {
         return img;
     }
 
-    public Marker getMarker() {
-        return marker;
-    }
+//    public Marker getMarker() {
+ //       return marker;
+//    }
 
     public String getTitle() {
         return title;
