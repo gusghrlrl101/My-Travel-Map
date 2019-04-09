@@ -15,11 +15,10 @@ import android.view.ViewGroup;
 public class MyFragment extends Fragment {
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
-        args.putString("id", "");
 
         MyFragment fragment = new MyFragment();
-        fragment.setArguments(args);
 
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -43,7 +42,5 @@ public class MyFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        System.out.println(getArguments().getString("id"));
     }
 }

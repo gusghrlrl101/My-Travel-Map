@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.model.Marker;
@@ -48,12 +49,25 @@ public class MyListFragment extends Fragment {
         listView = (ListView) layout.findViewById(R.id.listview);
         listView.setAdapter(adapter);
 
+        // List Click Listener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 클릭한 item 정보 가져오기
+                ListViewItem item = (ListViewItem) parent.getItemAtPosition(position);
+            }
+        });
+
         adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img1), "제목1", "내용1");
+        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img2), "제목2", "내용2");
+        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img3), "제목3", "내용3");
+        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img4), "제목4", "내용4");
+        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img5), "제목5", "내용5");
 
         return layout;
     }
 
-    public void addData(Drawable img, Marker marker, String title, String content){
+    public void addData(Drawable img, Marker marker, String title, String content) {
         adapter.addData(img, title, content);
     }
 }
