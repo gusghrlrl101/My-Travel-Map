@@ -97,7 +97,6 @@ public class PickImageHelper {
     }
 
 
-
     public static String getRealPathFromURI(Activity activity, Uri contentUri) {
         String result;
         Cursor cursor = activity.getContentResolver().query(contentUri, null, null, null, null);
