@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void moveInfo(String id) {
-        Intent intent = new Intent(this, MapsActivity.class);
+        Intent intent = new Intent(this, InfoActivity.class);
         intent.putExtra("id", id);
         startActivity(intent);
     }
