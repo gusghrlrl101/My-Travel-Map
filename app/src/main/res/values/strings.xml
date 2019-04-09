@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">My Travel Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="google_maps_key">AIzaSyDrqE7-T92-3xsDZodM_DI0ew9wLA5aksM</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
