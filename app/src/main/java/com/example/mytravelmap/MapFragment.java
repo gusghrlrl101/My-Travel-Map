@@ -23,10 +23,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends Fragment
         implements OnMapReadyCallback {
-    final private int MY_PERMISSION_ACCESS_LOCATION = 511;
-    final private String[] permissions = {android.Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
-
-    static private boolean isGranted = false;
     private Bundle mBundle;
     private View mView;
     private GoogleMap mMap = null;
@@ -63,36 +59,27 @@ public class MapFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(mBundle);
         mBundle = savedInstanceState;
-
-        // 권한 확인
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(permissions, MY_PERMISSION_ACCESS_LOCATION);
-        else
-            isGranted = true;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_map, container, false);
-        if (isGranted) {
-            mapView = (MapView) mView.findViewById(R.id.map);
-            mapView.getMapAsync(this);
-        }
+        mapView = (MapView) mView.findViewById(R.id.map);
+        mapView.getMapAsync(this);
         return mView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (isGranted && mapView != null)
+        if (mapView != null)
             mapView.onStart();
     }
 
     @Override
     public void onStop() {
-        if (isGranted && mapView != null)
+        if (mapView != null)
             mapView.onStop();
         super.onStop();
     }
@@ -100,34 +87,34 @@ public class MapFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (isGranted && mapView != null)
+        if (mapView != null)
             mapView.onSaveInstanceState(outState);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (isGranted && mapView != null)
+        if (mapView != null)
             mapView.onResume();
     }
 
     @Override
     public void onPause() {
-        if (isGranted && mapView != null)
+        if (mapView != null)
             mapView.onPause();
         super.onPause();
     }
 
     @Override
     public void onLowMemory() {
-        if (isGranted && mapView != null)
+        if (mapView != null)
             mapView.onLowMemory();
         super.onLowMemory();
     }
 
     @Override
     public void onDestroy() {
-        if (isGranted && mapView != null)
+        if (mapView != null)
             mapView.onLowMemory();
         super.onDestroy();
     }
@@ -135,8 +122,7 @@ public class MapFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (isGranted && mapView != null)
-            mapView.onCreate(savedInstanceState);
+        mapView.onCreate(savedInstanceState);
     }
 
     @SuppressLint("MissingPermission")
@@ -170,29 +156,6 @@ public class MapFragment extends Fragment
                 .snippet("Marker in Inha Univ."));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(inha));
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        boolean allGranted = true;
-        for (int grantResult : grantResults) {
-            if (grantResult == PackageManager.PERMISSION_DENIED) {
-                // toast 띄워주기
-
-
-                allGranted = false;
-                getActivity().finishAffinity();
-            }
-        }
-        // 허락한 경우 MapView 생성
-        if (allGranted) {
-            mapView = (MapView) mView.findViewById(R.id.map);
-            mapView.getMapAsync(this);
-            mapView.onCreate(mBundle);
-            mapView.onStart();
-            isGranted = true;
-        }
     }
 
     public void myCamera(double latitude, double longitude) {

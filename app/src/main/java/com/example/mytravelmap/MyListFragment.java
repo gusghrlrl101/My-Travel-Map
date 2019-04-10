@@ -60,6 +60,7 @@ public class MyListFragment extends Fragment {
             }
         });
 
+
         return layout;
     }
 }

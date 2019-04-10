@@ -6,11 +6,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +33,8 @@ public class PickImageHelper {
         File file = new File(getRealPathFromURI(activity,outputFileUri));
         if (file.exists())
             file.delete();
+
+        System.out.println("####" + file);
 
         List<Intent> allIntents = new ArrayList<>();
         PackageManager packageManager = activity.getPackageManager();
@@ -79,11 +87,13 @@ public class PickImageHelper {
      * Get URI to image received from capture by camera.
      */
     private static Uri getCaptureImageOutputUri(Activity activity) {
-        Uri outputFileUri = null;
-        File getImage = activity.getExternalCacheDir();
-        if (getImage != null) {
-            outputFileUri = Uri.fromFile(new File(getImage.getPath(), "ImagePicked.jpeg"));
-        }
+        File dir = new File(Environment.getExternalStorageDirectory() + "/image");
+        if (!dir.exists())
+            dir.mkdirs();
+
+        File path = new File(dir, "temp.jpg");
+        Uri outputFileUri = Uri.fromFile(path);
+
         return outputFileUri;
     }
 
