@@ -93,6 +93,7 @@ public class MapFragment extends Fragment
 
     @Override
     public void onResume() {
+        System.out.println("%%%%%%");
         super.onResume();
         if (mapView != null)
             mapView.onResume();
@@ -158,8 +159,7 @@ public class MapFragment extends Fragment
         mMap.moveCamera(CameraUpdateFactory.newLatLng(inha));
     }
 
-    public void myCamera(double latitude, double longitude) {
-        // Main Activity에서 리스트뷰 아이템 클릭 시 해당 위치로 이동하는 함수이다.
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
+    void addMarker(){
+
     }
 }

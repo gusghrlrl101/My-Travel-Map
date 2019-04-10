@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -66,16 +67,27 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, InfoActivity.class);
         intent.putExtra("id", id);
 
+        startActivity(intent);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK) {
-            mViewPager.setCurrentItem(requestCode, true);
             ListViewItem item = (ListViewItem) data.getSerializableExtra("item");
-            System.out.println("@@@@" + item.getImg());
+
+            Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
+            MyListFragment listFragment = (MyListFragment) page;
+            int cnt = listFragment.addData(item.getImg(), item.getTitle(), item.getContent(), item.getLatLng());
+
+            page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
+            MapFragment mapFragment = (MapFragment) page;
+
+            System.out.println("**************: " + cnt);
+        } else {
+            // toast 띄워주기
+            Toast toast = Toast.makeText(this, "오류가 발생했습니다.", Toast.LENGTH_SHORT);
+            toast.show();
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
 

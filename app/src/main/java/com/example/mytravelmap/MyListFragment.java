@@ -36,7 +36,6 @@ public class MyListFragment extends Fragment {
         return fragment;
     }
 
-
     public MyListFragment() {
         // Required empty public constructor
     }
@@ -62,5 +61,20 @@ public class MyListFragment extends Fragment {
 
 
         return layout;
+    }
+
+    int addData(String img, String title, String content, LatLng latLng) {
+        System.out.println("mylist addData ^^^^^^^^");
+        int cnt = adapter.addData(img, title, content, latLng);
+
+        // UI 변경이므로 UI 쓰레드 상에서 실행
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        return cnt;
     }
 }
