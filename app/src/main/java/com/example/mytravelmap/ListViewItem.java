@@ -1,31 +1,44 @@
 package com.example.mytravelmap;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
-public class ListViewItem {
-    private Drawable img;
+import java.io.File;
+import java.io.Serializable;
+
+public class ListViewItem
+        implements Serializable {
+    private String img;
     private String title;
     private String content;
-    private LatLng latLng;
+    private double longitude;
+    private double latitude;
+    private int id;
 
     // 생성자
-    public ListViewItem(Drawable img, String title, String content, LatLng latLng) {
+    public ListViewItem(String img, String title, String content, LatLng latLng, int id) {
         this.img = img;
         this.title = title;
         this.content = content;
-        this.latLng = latLng;
+        this.longitude = latLng.longitude;
+        this.latitude = latLng.latitude;
+        this.id = id;
+    }
+
+    public ListViewItem(String img, String title, String content, double longitute, double latitude) {
+        this.img = img;
+        this.title = title;
+        this.content = content;
+        this.longitude = longitute;
+        this.latitude = latitude;
     }
 
     // getter
-    public Drawable getImg() {
+    public String getImg() {
         return img;
-    }
-
-    public LatLng getLatLng() {
-        return latLng;
     }
 
     public String getTitle() {
@@ -34,5 +47,14 @@ public class ListViewItem {
 
     public String getContent() {
         return content;
+    }
+
+    public LatLng getLatLng() {
+        LatLng latLng = new LatLng(longitude, latitude);
+        return latLng;
+    }
+
+    public int getId() {
+        return id;
     }
 }

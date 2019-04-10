@@ -158,7 +158,6 @@ public class MapFragment extends Fragment
             @Override
             public boolean onMarkerClick(Marker marker) {
                 mMapInterface.moveInfo(marker.getId());
-
                 return false;
             }
         });

@@ -1,6 +1,8 @@
 package com.example.mytravelmap;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +17,7 @@ import com.google.android.gms.maps.model.Marker;
 import java.util.ArrayList;
 
 
-public class ListViewAdapter extends BaseAdapter{
+public class ListViewAdapter extends BaseAdapter {
     // 저장할 데이터
     private ArrayList<ListViewItem> data = new ArrayList<ListViewItem>();
 
@@ -55,7 +57,7 @@ public class ListViewAdapter extends BaseAdapter{
         ListViewItem listViewItem = data.get(position);
 
         // 해당하는 View에 데이터 삽입
-        imgView.setImageDrawable(listViewItem.getImg());
+        imgView.setImageDrawable(Drawable.createFromPath(listViewItem.getImg()));
         titleView.setText(listViewItem.getTitle());
         contentView.setText(listViewItem.getContent());
 
@@ -63,8 +65,11 @@ public class ListViewAdapter extends BaseAdapter{
     }
 
     // List에 데이터 추가하기
-    void addData(Drawable img, String title, String content, LatLng latLng) {
-        ListViewItem item = new ListViewItem(img, title, content, latLng);
+    void addData(String img, String title, String content, LatLng latLng) {
+        int size = 0;
+        if (!data.isEmpty())
+            size = data.get(data.size() - 1).getId() + 1;
+        ListViewItem item = new ListViewItem(img, title, content, latLng, size);
         data.add(item);
     }
 

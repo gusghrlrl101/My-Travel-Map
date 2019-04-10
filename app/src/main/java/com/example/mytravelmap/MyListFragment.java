@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,13 +59,6 @@ public class MyListFragment extends Fragment {
                 ListViewItem item = (ListViewItem) parent.getItemAtPosition(position);
             }
         });
-
-        LatLng latLng = new LatLng(132.0,37.0);
-        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img1), "제목1", "내용1", latLng);
-        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img2), "제목2", "내용2", latLng);
-        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img3), "제목3", "내용3", latLng);
-        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img4), "제목4", "내용4", latLng);
-        adapter.addData(ContextCompat.getDrawable(getActivity(), R.drawable.img5), "제목5", "내용5", latLng);
 
         return layout;
     }

@@ -158,5 +158,12 @@ public class AddItemActivity extends AppCompatActivity
 
         Toast toast = Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT);
         toast.show();
+
+        ListViewItem item = new ListViewItem(file.toString(), title, content, marker.getPosition().longitude, marker.getPosition().latitude);
+
+        Intent intent = new Intent();
+        intent.putExtra("item", item);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }
