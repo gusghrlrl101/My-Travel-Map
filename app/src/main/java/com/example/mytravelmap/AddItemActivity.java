@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -32,8 +33,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class AddItemActivity extends AppCompatActivity
@@ -42,14 +48,11 @@ public class AddItemActivity extends AppCompatActivity
     private Drawable buttonImg;
     private GoogleMap map;
     private Marker marker = null;
-    private MyInterface myInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
-
-        myInterface = (MyInterface) getIntent().getSerializableExtra("interface");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -105,7 +108,7 @@ public class AddItemActivity extends AppCompatActivity
             Toast toast = Toast.makeText(this, "위치를 터치해주세요", Toast.LENGTH_SHORT);
             toast.show();
         } else {
-            myInterface.addData();
+            addData(buttonImg, title, content, marker);
         }
     }
 
@@ -126,5 +129,34 @@ public class AddItemActivity extends AppCompatActivity
                     marker.setPosition(latLng);
             }
         });
+    }
+
+    private void addData(Drawable buttonImg, String title, String content, Marker marker) {
+        // 현재 시각 받아오기
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        // 파일명 저장
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String path = sdf.format(date) + ".jpg";
+
+        Bitmap bitmap = ((BitmapDrawable) buttonImg).getBitmap();
+        File dir = new File(Environment.getExternalStorageDirectory() + "/image");
+        if (!dir.exists())
+            dir.mkdirs();
+
+        File file = new File(dir, path);
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Toast toast = Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT);
+        toast.show();
     }
 }
