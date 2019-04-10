@@ -36,6 +36,15 @@ public class ListViewItem
         this.latitude = latitude;
     }
 
+    public ListViewItem(String img, String title, String content, double longitute, double latitude, int id) {
+        this.img = img;
+        this.title = title;
+        this.content = content;
+        this.longitude = longitute;
+        this.latitude = latitude;
+        this.id = id;
+    }
+
     // getter
     public String getImg() {
         return img;

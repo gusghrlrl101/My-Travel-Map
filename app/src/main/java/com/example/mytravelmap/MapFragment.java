@@ -29,7 +29,9 @@ public class MapFragment extends Fragment
     private MapView mapView = null;
     public MapInterface mMapInterface;
 
-    private double latitude, longitude;
+    public interface MapInterface {
+        void moveInfo(String id);
+    }
 
     public static MapFragment newInstance() {
         Bundle args = new Bundle();
@@ -39,11 +41,6 @@ public class MapFragment extends Fragment
 
         return fragment;
     }
-
-    public interface MapInterface {
-        void moveInfo(String id);
-    }
-
 
     public MapFragment() {
         // Required empty public constructor
@@ -93,7 +90,6 @@ public class MapFragment extends Fragment
 
     @Override
     public void onResume() {
-        System.out.println("%%%%%%");
         super.onResume();
         if (mapView != null)
             mapView.onResume();
@@ -132,14 +128,6 @@ public class MapFragment extends Fragment
         mMap = googleMap;
         // 현재 위치 버튼 사용
         mMap.setMyLocationEnabled(true);
-        // 지도 클릭 리스너
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                latitude = latLng.latitude;
-                longitude = latLng.longitude;
-            }
-        });
         // 마커 클릭 리스너
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -159,7 +147,8 @@ public class MapFragment extends Fragment
         mMap.moveCamera(CameraUpdateFactory.newLatLng(inha));
     }
 
-    void addMarker(){
-
+    void addMarker(LatLng latLng, String key) {
+        Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
+        marker.setTag(key);
     }
 }

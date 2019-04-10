@@ -42,6 +42,10 @@ public class ListViewAdapter extends BaseAdapter {
         return position;
     }
 
+    public ArrayList<ListViewItem> getData(){
+        return data;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //  convertView에 "listview_item" Layout을 inflate 하기
@@ -68,7 +72,6 @@ public class ListViewAdapter extends BaseAdapter {
 
     // List에 데이터 추가하기
     int addData(String img, String title, String content, LatLng latLng) {
-        System.out.println("adapter addData ^^^^^^^^");
         cnt++;
         ListViewItem item = new ListViewItem(img, title, content, latLng, cnt);
         data.add(item);

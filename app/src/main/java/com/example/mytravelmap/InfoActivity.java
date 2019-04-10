@@ -25,7 +25,7 @@ public class InfoActivity extends FragmentActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        System.out.println(getIntent().getExtras().getString("id"));
+        int id = Integer.parseInt(getIntent().getExtras().getString("id"));
     }
 
     @Override

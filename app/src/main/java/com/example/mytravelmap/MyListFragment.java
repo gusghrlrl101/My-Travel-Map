@@ -26,6 +26,11 @@ import java.util.List;
 public class MyListFragment extends Fragment {
     private ListViewAdapter adapter;
     private ListView listView = null;
+    private ListInterface mListInterface;
+
+    public interface ListInterface{
+        void moveInfo(int id);
+    }
 
     public static MyListFragment newInstance() {
         Bundle args = new Bundle();
@@ -56,6 +61,7 @@ public class MyListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 클릭한 item 정보 가져오기
                 ListViewItem item = (ListViewItem) parent.getItemAtPosition(position);
+                mListInterface.moveInfo(item.getId());
             }
         });
 
@@ -64,7 +70,6 @@ public class MyListFragment extends Fragment {
     }
 
     int addData(String img, String title, String content, LatLng latLng) {
-        System.out.println("mylist addData ^^^^^^^^");
         int cnt = adapter.addData(img, title, content, latLng);
 
         // UI 변경이므로 UI 쓰레드 상에서 실행
