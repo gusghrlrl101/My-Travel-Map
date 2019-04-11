@@ -1,12 +1,6 @@
 package com.example.mytravelmap;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-
-import java.io.File;
 import java.io.Serializable;
 
 public class ListViewItem
@@ -59,7 +53,7 @@ public class ListViewItem
     }
 
     public LatLng getLatLng() {
-        LatLng latLng = new LatLng(longitude, latitude);
+        LatLng latLng = new LatLng(latitude, longitude);
         return latLng;
     }
 

@@ -1,34 +1,25 @@
 package com.example.mytravelmap;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class AddItemActivity extends AppCompatActivity
         implements OnMapReadyCallback {
@@ -73,7 +63,6 @@ public class AddItemActivity extends AppCompatActivity
 
         if (resultCode == RESULT_OK) {
             Uri imageUri = PickImageHelper.getPickImageResultUri(this, data);
-            System.out.println(imageUri);
             try {
                 InputStream is = this.getContentResolver().openInputStream(imageUri);
                 BitmapFactory.Options options = new BitmapFactory.Options();
@@ -118,6 +107,9 @@ public class AddItemActivity extends AppCompatActivity
         map = googleMap;
         // 현재 위치 버튼 사용
         map.setMyLocationEnabled(true);
+
+        LatLng inha = new LatLng(37.450601, 126.657318);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(inha, 6));
 
         // 지도 클릭 리스너
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {

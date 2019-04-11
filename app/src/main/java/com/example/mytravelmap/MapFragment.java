@@ -1,17 +1,12 @@
 package com.example.mytravelmap;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -140,14 +135,8 @@ public class MapFragment extends Fragment
 
         mMapInterface.addFirst(mMap);
 
-        // Add a marker in Inha univ. and move the camera
         LatLng inha = new LatLng(37.450601, 126.657318);
-        mMap.addMarker(new MarkerOptions()
-                .position(inha)
-                .title("inha")
-                .snippet("Marker in Inha Univ."));
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(inha));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(inha, 7));
     }
 
     void addMarker(LatLng latLng, String key) {

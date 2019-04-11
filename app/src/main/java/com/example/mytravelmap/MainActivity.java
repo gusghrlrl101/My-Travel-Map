@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity
             sqLiteDB = SQLiteDatabase.openOrCreateDatabase(DB_PATH + "hyunho.db", null);
             sqLiteDB.execSQL("CREATE TABLE IF NOT EXISTS " +
                     "LIST (ID TEXT PRIMARY KEY, IMG TEXT, TITLE TEXT, CONTENT TEXT, LONGITUDE DOUBLE, LATITUDE DOUBLE)");
-            System.out.println("&&&&&&&&&&&&&&&&&&");
 
         }
     }
@@ -93,25 +92,19 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void moveInfo(String id) {
         Intent intent = new Intent(this, InfoActivity.class);
-        intent.putExtra("id", id);
-
-        String select = "SELECT * FROM LIST WHERE ID=";
-        Cursor cursor = sqLiteDB.rawQuery(select, null);
-
-        startActivity(intent);
-    }
-
-    @Override
-    public void moveInfo(String id, ListViewAdapter adapter) {
-        Intent intent = new Intent(this, InfoActivity.class);
         ListViewItem item = new ListViewItem("", "", "", 0.0, 0.0);
-        for (ListViewItem data : adapter.getData()) {
-            if (data.getId().equals(id)) {
-                item.setData(data.getImg(), data.getTitle(), data.getContent(), data.getLatLng());
-                break;
-            }
-        }
 
+        String select = "SELECT * FROM LIST WHERE ID = " + id;
+        Cursor cursor = sqLiteDB.rawQuery(select, null);
+        if (cursor.moveToNext()) {
+            String img = cursor.getString(cursor.getColumnIndex("IMG"));
+            String title = cursor.getString(cursor.getColumnIndex("TITLE"));
+            String content = cursor.getString(cursor.getColumnIndex("CONTENT"));
+            double longitude = cursor.getDouble(cursor.getColumnIndex("LONGITUDE"));
+            double latitude = cursor.getDouble(cursor.getColumnIndex("LATITUDE"));
+            LatLng latLng = new LatLng(latitude, longitude);
+            item.setData(img, title, content, latLng);
+        }
         intent.putExtra("item", item);
         startActivity(intent);
     }
@@ -126,7 +119,7 @@ public class MainActivity extends AppCompatActivity
             double latitude = cursor.getDouble(cursor.getColumnIndex("LATITUDE"));
             String id = cursor.getString(cursor.getColumnIndex("ID"));
 
-            LatLng latLng = new LatLng(longitude, latitude);
+            LatLng latLng = new LatLng(latitude, longitude);
             Marker marker = map.addMarker(new MarkerOptions().position(latLng));
             marker.setTag(id);
         }
@@ -145,7 +138,7 @@ public class MainActivity extends AppCompatActivity
             double latitude = cursor.getDouble(cursor.getColumnIndex("LATITUDE"));
             String id = cursor.getString(cursor.getColumnIndex("ID"));
 
-            LatLng latLng = new LatLng(longitude, latitude);
+            LatLng latLng = new LatLng(latitude, longitude);
             adapter.addData(img, title, content, latLng, id);
         }
     }
