@@ -16,10 +16,10 @@ public class ListViewItem
     private String content;
     private double longitude;
     private double latitude;
-    private int id;
+    private String id;
 
     // 생성자
-    public ListViewItem(String img, String title, String content, LatLng latLng, int id) {
+    public ListViewItem(String img, String title, String content, LatLng latLng, String id) {
         this.img = img;
         this.title = title;
         this.content = content;
@@ -28,19 +28,19 @@ public class ListViewItem
         this.id = id;
     }
 
-    public ListViewItem(String img, String title, String content, double longitute, double latitude) {
+    public ListViewItem(String img, String title, String content, double longitude, double latitude) {
         this.img = img;
         this.title = title;
         this.content = content;
-        this.longitude = longitute;
+        this.longitude = longitude;
         this.latitude = latitude;
     }
 
-    public ListViewItem(String img, String title, String content, double longitute, double latitude, int id) {
+    public ListViewItem(String img, String title, String content, double longitude, double latitude, String id) {
         this.img = img;
         this.title = title;
         this.content = content;
-        this.longitude = longitute;
+        this.longitude = longitude;
         this.latitude = latitude;
         this.id = id;
     }
@@ -63,7 +63,15 @@ public class ListViewItem
         return latLng;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
+    }
+
+    public void setData(String img, String title, String content, LatLng latLng) {
+        this.img = img;
+        this.title = title;
+        this.content = content;
+        this.longitude = latLng.longitude;
+        this.latitude = latLng.latitude;
     }
 }

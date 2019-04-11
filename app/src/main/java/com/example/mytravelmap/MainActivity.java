@@ -18,8 +18,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -63,30 +67,21 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
+            String DB_PATH;
+            if (android.os.Build.VERSION.SDK_INT >= 4.2)
+                DB_PATH = getApplicationInfo().dataDir + "/databases/";
+            else
+                DB_PATH = "/data/data/" + getPackageName() + "/databases/";
 
-            sqLiteDB = SQLiteDatabase.openOrCreateDatabase("/data/data/com.example.mytravelmap/databases/hyunho.db", null);
+            File db_dir = new File(DB_PATH);
+            if (!db_dir.exists())
+                db_dir.mkdirs();
+
+            sqLiteDB = SQLiteDatabase.openOrCreateDatabase(DB_PATH + "hyunho.db", null);
             sqLiteDB.execSQL("CREATE TABLE IF NOT EXISTS " +
                     "LIST (ID TEXT PRIMARY KEY, IMG TEXT, TITLE TEXT, CONTENT TEXT, LONGITUDE DOUBLE, LATITUDE DOUBLE)");
             System.out.println("&&&&&&&&&&&&&&&&&&");
 
-            String select = "SELECT * FROM LIST";
-            Cursor cursor = sqLiteDB.rawQuery(select, null);
-            System.out.println(cursor.getCount());
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
-                    String img = cursor.getString(cursor.getColumnIndex("IMG"));
-                    String title = cursor.getString(cursor.getColumnIndex("TITLE"));
-                    String content = cursor.getString(cursor.getColumnIndex("CONTENT"));
-                    double longitude = cursor.getDouble(cursor.getColumnIndex("LONGITUDE"));
-                    double latitude = cursor.getDouble(cursor.getColumnIndex("LATITUDE"));
-
-                    Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
-                    MyListFragment listFragment = (MyListFragment) page;
-
-                    LatLng latLng = new LatLng(longitude, latitude);
-                    listFragment.addData(img, title, content, latLng);
-                }
-            }
         }
     }
 
@@ -95,40 +90,80 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(intent, mViewPager.getCurrentItem());
     }
 
-
     @Override
     public void moveInfo(String id) {
-//        디비에서 id 찾기
-//        ListViewItem item = new ListViewItem(file.toString(), title, content, marker.getPosition().longitude, marker.getPosition().latitude);
+        Intent intent = new Intent(this, InfoActivity.class);
+        intent.putExtra("id", id);
 
-        Intent intent = new Intent();
-//        intent.putExtra("item", item);
+        String select = "SELECT * FROM LIST WHERE ID=";
+        Cursor cursor = sqLiteDB.rawQuery(select, null);
 
         startActivity(intent);
     }
 
     @Override
-    public void moveInfo(int id) {
+    public void moveInfo(String id, ListViewAdapter adapter) {
         Intent intent = new Intent(this, InfoActivity.class);
-        intent.putExtra("id", Integer.toString(id));
+        ListViewItem item = new ListViewItem("", "", "", 0.0, 0.0);
+        for (ListViewItem data : adapter.getData()) {
+            if (data.getId().equals(id)) {
+                item.setData(data.getImg(), data.getTitle(), data.getContent(), data.getLatLng());
+                break;
+            }
+        }
 
+        intent.putExtra("item", item);
         startActivity(intent);
+    }
+
+    @Override
+    public void addFirst(GoogleMap map) {
+        String select = "SELECT * FROM LIST";
+        Cursor cursor = sqLiteDB.rawQuery(select, null);
+
+        while (cursor.moveToNext()) {
+            double longitude = cursor.getDouble(cursor.getColumnIndex("LONGITUDE"));
+            double latitude = cursor.getDouble(cursor.getColumnIndex("LATITUDE"));
+            String id = cursor.getString(cursor.getColumnIndex("ID"));
+
+            LatLng latLng = new LatLng(longitude, latitude);
+            Marker marker = map.addMarker(new MarkerOptions().position(latLng));
+            marker.setTag(id);
+        }
+    }
+
+    @Override
+    public void addFirst(ListViewAdapter adapter) {
+        String select = "SELECT * FROM LIST";
+        Cursor cursor = sqLiteDB.rawQuery(select, null);
+
+        while (cursor.moveToNext()) {
+            String img = cursor.getString(cursor.getColumnIndex("IMG"));
+            String title = cursor.getString(cursor.getColumnIndex("TITLE"));
+            String content = cursor.getString(cursor.getColumnIndex("CONTENT"));
+            double longitude = cursor.getDouble(cursor.getColumnIndex("LONGITUDE"));
+            double latitude = cursor.getDouble(cursor.getColumnIndex("LATITUDE"));
+            String id = cursor.getString(cursor.getColumnIndex("ID"));
+
+            LatLng latLng = new LatLng(longitude, latitude);
+            adapter.addData(img, title, content, latLng, id);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK) {
-            ListViewItem item = (ListViewItem) data.getSerializableExtra("item");
-
-            Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
-            MyListFragment listFragment = (MyListFragment) page;
-            listFragment.addData(item.getImg(), item.getTitle(), item.getContent(), item.getLatLng());
-
-
             long now = System.currentTimeMillis();
             Date date = new Date(now);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             String key = sdf.format(date);
+
+            ListViewItem item = (ListViewItem) data.getSerializableExtra("item");
+
+            Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
+            MyListFragment listFragment = (MyListFragment) page;
+
+            listFragment.addData(item.getImg(), item.getTitle(), item.getContent(), item.getLatLng(), key);
 
             ContentValues cv = new ContentValues();
             cv.put("ID", key);
@@ -138,7 +173,6 @@ public class MainActivity extends AppCompatActivity
             cv.put("LONGITUDE", item.getLatLng().longitude);
             cv.put("LATITUDE", item.getLatLng().latitude);
             sqLiteDB.insert("LIST", null, cv);
-
 
             page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
             MapFragment mapFragment = (MapFragment) page;

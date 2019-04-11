@@ -4,6 +4,7 @@ package com.example.mytravelmap;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -16,7 +17,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -28,8 +31,9 @@ public class MyListFragment extends Fragment {
     private ListView listView = null;
     private ListInterface mListInterface;
 
-    public interface ListInterface{
-        void moveInfo(int id);
+    public interface ListInterface {
+        void moveInfo(String id, ListViewAdapter adapter);
+        void addFirst(ListViewAdapter adapter);
     }
 
     public static MyListFragment newInstance() {
@@ -46,6 +50,17 @@ public class MyListFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mListInterface = (ListInterface) context;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -55,22 +70,23 @@ public class MyListFragment extends Fragment {
         listView = (ListView) layout.findViewById(R.id.listview);
         listView.setAdapter(adapter);
 
+        mListInterface.addFirst(adapter);
+
         // List Click Listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 클릭한 item 정보 가져오기
                 ListViewItem item = (ListViewItem) parent.getItemAtPosition(position);
-                mListInterface.moveInfo(item.getId());
+                mListInterface.moveInfo(item.getId(), adapter);
             }
         });
-
 
         return layout;
     }
 
-    int addData(String img, String title, String content, LatLng latLng) {
-        int cnt = adapter.addData(img, title, content, latLng);
+    void addData(String img, String title, String content, LatLng latLng, String id) {
+        adapter.addData(img, title, content, latLng, id);
 
         // UI 변경이므로 UI 쓰레드 상에서 실행
         getActivity().runOnUiThread(new Runnable() {
@@ -79,7 +95,5 @@ public class MyListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-
-        return cnt;
     }
 }

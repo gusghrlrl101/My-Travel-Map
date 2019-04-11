@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class ListViewAdapter extends BaseAdapter {
     // 저장할 데이터
     private ArrayList<ListViewItem> data = new ArrayList<ListViewItem>();
-    private int cnt = 0;
 
     // 기본 생성자
     public ListViewAdapter() {
@@ -71,11 +70,8 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     // List에 데이터 추가하기
-    int addData(String img, String title, String content, LatLng latLng) {
-        cnt++;
-        ListViewItem item = new ListViewItem(img, title, content, latLng, cnt);
+    void addData(String img, String title, String content, LatLng latLng, String id) {
+        ListViewItem item = new ListViewItem(img, title, content, latLng, id);
         data.add(item);
-
-        return cnt;
     }
 }

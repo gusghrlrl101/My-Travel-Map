@@ -31,6 +31,7 @@ public class MapFragment extends Fragment
 
     public interface MapInterface {
         void moveInfo(String id);
+        void addFirst(GoogleMap map);
     }
 
     public static MapFragment newInstance() {
@@ -132,10 +133,12 @@ public class MapFragment extends Fragment
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                mMapInterface.moveInfo(marker.getId());
+                mMapInterface.moveInfo((String)marker.getTag());
                 return false;
             }
         });
+
+        mMapInterface.addFirst(mMap);
 
         // Add a marker in Inha univ. and move the camera
         LatLng inha = new LatLng(37.450601, 126.657318);
