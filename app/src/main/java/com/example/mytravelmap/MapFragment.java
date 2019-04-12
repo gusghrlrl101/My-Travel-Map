@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class MapFragment extends Fragment
         implements OnMapReadyCallback {
-    private ArrayList<Marker> markers = new ArrayList<Marker>();
+    private ArrayList<Marker> markers;
 
     private Bundle mBundle;
     private View mView;
@@ -31,7 +31,7 @@ public class MapFragment extends Fragment
     public interface MapInterface {
         void moveInfo(String id);
 
-        void addFirst(GoogleMap map);
+        ArrayList<Marker> addFirst(GoogleMap map);
     }
 
     public static MapFragment newInstance() {
@@ -138,7 +138,7 @@ public class MapFragment extends Fragment
             }
         });
 
-        mMapInterface.addFirst(mMap);
+        markers = mMapInterface.addFirst(mMap);
 
         LatLng inha = new LatLng(37.450601, 126.657318);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(inha, 7));

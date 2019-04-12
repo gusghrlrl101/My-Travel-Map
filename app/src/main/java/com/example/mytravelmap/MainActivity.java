@@ -24,15 +24,22 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
+
 import java.io.File;
+import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static com.kakao.util.helper.Utility.getKeyHash;
 
 public class MainActivity extends AppCompatActivity
-        implements MapFragment.MapInterface, MyListFragment.ListInterface {
-    final private int REQUEST_ADD = 5011, REQUEST_INFO = 5012;
+        implements MapFragment.MapInterface, MyListFragment.ListInterface, MyFragment.MyInterface {
+    final private int REQUEST_ADD = 5011, REQUEST_DEL = 5012;
     final private int MY_PERMISSION = 512;
     final private String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
@@ -111,13 +118,15 @@ public class MainActivity extends AppCompatActivity
             item.setData(img, title, content, latLng);
         }
         intent.putExtra("item", item);
-        startActivityForResult(intent, REQUEST_INFO);
+        startActivityForResult(intent, REQUEST_DEL);
     }
 
     @Override
-    public void addFirst(GoogleMap map) {
+    public ArrayList<Marker> addFirst(GoogleMap map) {
         String select = "SELECT * FROM LIST";
         Cursor cursor = sqLiteDB.rawQuery(select, null);
+
+        ArrayList<Marker> list = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             double longitude = cursor.getDouble(cursor.getColumnIndex("LONGITUDE"));
@@ -127,7 +136,10 @@ public class MainActivity extends AppCompatActivity
             LatLng latLng = new LatLng(latitude, longitude);
             Marker marker = map.addMarker(new MarkerOptions().position(latLng));
             marker.setTag(id);
+            list.add(marker);
         }
+
+        return list;
     }
 
     @Override
@@ -176,7 +188,12 @@ public class MainActivity extends AppCompatActivity
                 page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
                 MapFragment mapFragment = (MapFragment) page;
                 mapFragment.addMarker(item.getLatLng(), key);
-            } else if (requestCode == REQUEST_INFO) {
+
+
+                page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 2);
+                MyFragment myFragment = (MyFragment) page;
+                myFragment.addItem(key);
+            } else if (requestCode == REQUEST_DEL) {
                 String id = data.getStringExtra("id");
                 System.out.println(id);
                 sqLiteDB.execSQL("DELETE FROM LIST WHERE ID = '" + id + "'");
@@ -188,6 +205,10 @@ public class MainActivity extends AppCompatActivity
                 page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
                 MapFragment mapFragment = (MapFragment) page;
                 mapFragment.deleteMarker(id);
+
+                page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 2);
+                MyFragment myFragment = (MyFragment) page;
+                myFragment.deleteItem(id);
 
                 // toast 띄워주기
                 Toast toast = Toast.makeText(this, "삭제되었습니다.", Toast.LENGTH_SHORT);
@@ -219,5 +240,21 @@ public class MainActivity extends AppCompatActivity
             isGranted = true;
             recreate();
         }
+    }
+
+    @Override
+    public List<LocalDate> getDates() {
+        List<LocalDate> list = new ArrayList<>();
+        String select = "SELECT ID FROM LIST";
+        Cursor cursor = sqLiteDB.rawQuery(select, null);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+        while (cursor.moveToNext()) {
+            String id = cursor.getString(cursor.getColumnIndex("ID"));
+            LocalDate date = LocalDate.parse(id, formatter);
+            list.add(date);
+        }
+
+        return list;
     }
 }
