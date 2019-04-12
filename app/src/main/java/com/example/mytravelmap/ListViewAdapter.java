@@ -37,10 +37,6 @@ public class ListViewAdapter extends BaseAdapter {
         return position;
     }
 
-    public ArrayList<ListViewItem> getData() {
-        return data;
-    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //  convertView에 "listview_item" Layout을 inflate 하기
@@ -63,6 +59,10 @@ public class ListViewAdapter extends BaseAdapter {
         contentView.setText(listViewItem.getContent());
 
         return convertView;
+    }
+
+    public ArrayList<ListViewItem> getData() {
+        return data;
     }
 
     // List에 데이터 추가하기

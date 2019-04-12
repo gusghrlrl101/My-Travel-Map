@@ -28,8 +28,6 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.io.File;
-import java.lang.reflect.Array;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,7 +36,7 @@ import java.util.List;
 import static com.kakao.util.helper.Utility.getKeyHash;
 
 public class MainActivity extends AppCompatActivity
-        implements MapFragment.MapInterface, MyListFragment.ListInterface, MyFragment.MyInterface {
+        implements MapFragment.MapInterface, MyListFragment.ListInterface, CalendarFragment.CalendarInterface {
     final private int REQUEST_ADD = 5011, REQUEST_DEL = 5012;
     final private int MY_PERMISSION = 512;
     final private String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
@@ -191,8 +189,8 @@ public class MainActivity extends AppCompatActivity
 
 
                 page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 2);
-                MyFragment myFragment = (MyFragment) page;
-                myFragment.addItem(key);
+                CalendarFragment calendarFragment = (CalendarFragment) page;
+                calendarFragment.addItem(key);
             } else if (requestCode == REQUEST_DEL) {
                 String id = data.getStringExtra("id");
                 System.out.println(id);
@@ -207,8 +205,8 @@ public class MainActivity extends AppCompatActivity
                 mapFragment.deleteMarker(id);
 
                 page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 2);
-                MyFragment myFragment = (MyFragment) page;
-                myFragment.deleteItem(id);
+                CalendarFragment calendarFragment = (CalendarFragment) page;
+                calendarFragment.deleteItem(id);
 
                 // toast 띄워주기
                 Toast toast = Toast.makeText(this, "삭제되었습니다.", Toast.LENGTH_SHORT);
@@ -253,6 +251,29 @@ public class MainActivity extends AppCompatActivity
             String id = cursor.getString(cursor.getColumnIndex("ID"));
             LocalDate date = LocalDate.parse(id, formatter);
             list.add(date);
+        }
+
+        return list;
+    }
+
+    @Override
+    public ArrayList<ListViewItem> getList(String key) {
+        ArrayList<ListViewItem> list = new ArrayList<>();
+
+        String select = "SELECT * FROM LIST WHERE ID LIKE '" + key + "%'";
+        Cursor cursor = sqLiteDB.rawQuery(select, null);
+
+        while (cursor.moveToNext()) {
+            String img = cursor.getString(cursor.getColumnIndex("IMG"));
+            String title = cursor.getString(cursor.getColumnIndex("TITLE"));
+            String content = cursor.getString(cursor.getColumnIndex("CONTENT"));
+            double longitude = cursor.getDouble(cursor.getColumnIndex("LONGITUDE"));
+            double latitude = cursor.getDouble(cursor.getColumnIndex("LATITUDE"));
+            String id = cursor.getString(cursor.getColumnIndex("ID"));
+
+            ListViewItem data = new ListViewItem(img, title, content, longitude, latitude, id);
+            list.add(data);
+            System.out.println("=========" + data.getId());
         }
 
         return list;

@@ -2,74 +2,69 @@ package com.example.mytravelmap;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 
 import org.threeten.bp.LocalDate;
-import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
-import org.w3c.dom.CDATASection;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyFragment extends Fragment {
+public class CalendarFragment extends Fragment {
     private MaterialCalendarView calendarView;
-    private MyInterface myInterface;
+    private CalendarInterface calInterface;
     final private List<CalendarDay> days = new ArrayList<>();
 
-    public interface MyInterface {
+    public interface CalendarInterface {
         List<LocalDate> getDates();
+
+        ArrayList<ListViewItem> getList(String key);
     }
 
-    public static MyFragment newInstance() {
+    public static CalendarFragment newInstance() {
         Bundle args = new Bundle();
 
-        MyFragment fragment = new MyFragment();
+        CalendarFragment fragment = new CalendarFragment();
 
         fragment.setArguments(args);
         return fragment;
     }
 
 
-    public MyFragment() {
+    public CalendarFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        myInterface = (MyInterface) context;
+        calInterface = (CalendarInterface) context;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View layout = inflater.inflate(R.layout.fragment_my, container, false);
+        View layout = inflater.inflate(R.layout.fragment_calendar, container, false);
         calendarView = (MaterialCalendarView) layout.findViewById(R.id.calendarView);
         calendarView.setDateSelected(CalendarDay.today(), true);
 
-        List<LocalDate> list = myInterface.getDates();
+        List<LocalDate> list = calInterface.getDates();
         for (LocalDate date : list) {
             CalendarDay day = CalendarDay.from(date);
             days.add(day);
@@ -79,13 +74,24 @@ public class MyFragment extends Fragment {
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView materialCalendarView, @NonNull CalendarDay calendarDay, boolean b) {
-                if (days.contains(calendarDay)) {
-
-                }
+                if (days.contains(calendarDay))
+                    gridView(calendarDay);
             }
         });
 
         return layout;
+    }
+
+    private void gridView(CalendarDay calendarDay) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String key = calendarDay.getDate().format(formatter);
+
+        ArrayList<ListViewItem> list = calInterface.getList(key);
+        System.out.println("===============" + list.size());
+
+        Intent intent = new Intent(getActivity(), GridActivity.class);
+        intent.putExtra("list", list);
+        startActivityForResult(intent, 100);
     }
 
     public void addItem(String id) {

@@ -19,7 +19,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
         else if (position == 1)
             return MyListFragment.newInstance();
         else if (position == 2)
-            return MyFragment.newInstance();
+            return CalendarFragment.newInstance();
         else
             return null;
     }

@@ -12,8 +12,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp" />
 
     <TextView
         android:id="@+id/list_title"
@@ -22,8 +22,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
         android:layout_toEndOf="@+id/list_img"
         android:text="제목" />
 
