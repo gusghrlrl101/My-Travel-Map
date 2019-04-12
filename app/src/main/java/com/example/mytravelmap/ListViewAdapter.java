@@ -37,7 +37,7 @@ public class ListViewAdapter extends BaseAdapter {
         return position;
     }
 
-    public ArrayList<ListViewItem> getData(){
+    public ArrayList<ListViewItem> getData() {
         return data;
     }
 
@@ -69,5 +69,16 @@ public class ListViewAdapter extends BaseAdapter {
     void addData(String img, String title, String content, LatLng latLng, String id) {
         ListViewItem item = new ListViewItem(img, title, content, latLng, id);
         data.add(item);
+    }
+
+    void deleteData(String id) {
+        int index = 0;
+        for (ListViewItem item : data) {
+            if (item.getId().equals(id)) {
+                data.remove(index);
+                break;
+            }
+            index++;
+        }
     }
 }

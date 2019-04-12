@@ -29,6 +29,7 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
         implements MapFragment.MapInterface, MyListFragment.ListInterface {
+    final private int REQUEST_ADD = 5011, REQUEST_INFO = 5012;
     final private int MY_PERMISSION = 512;
     final private String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
@@ -86,13 +87,13 @@ public class MainActivity extends AppCompatActivity
 
     private void addItem() {
         Intent intent = new Intent(this, AddItemActivity.class);
-        startActivityForResult(intent, mViewPager.getCurrentItem());
+        startActivityForResult(intent, REQUEST_ADD);
     }
 
     @Override
     public void moveInfo(String id) {
         Intent intent = new Intent(this, InfoActivity.class);
-        ListViewItem item = new ListViewItem("", "", "", 0.0, 0.0);
+        ListViewItem item = new ListViewItem("", "", "", 0.0, 0.0, id);
 
         String select = "SELECT * FROM LIST WHERE ID = " + id;
         Cursor cursor = sqLiteDB.rawQuery(select, null);
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity
             item.setData(img, title, content, latLng);
         }
         intent.putExtra("item", item);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_INFO);
     }
 
     @Override
@@ -146,30 +147,52 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK) {
-            long now = System.currentTimeMillis();
-            Date date = new Date(now);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-            String key = sdf.format(date);
+            if (requestCode == REQUEST_ADD) {
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                String key = sdf.format(date);
 
-            ListViewItem item = (ListViewItem) data.getSerializableExtra("item");
+                ListViewItem item = (ListViewItem) data.getSerializableExtra("item");
 
-            Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
-            MyListFragment listFragment = (MyListFragment) page;
+                Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
+                MyListFragment listFragment = (MyListFragment) page;
 
-            listFragment.addData(item.getImg(), item.getTitle(), item.getContent(), item.getLatLng(), key);
+                listFragment.addData(item.getImg(), item.getTitle(), item.getContent(), item.getLatLng(), key);
 
-            ContentValues cv = new ContentValues();
-            cv.put("ID", key);
-            cv.put("IMG", item.getImg());
-            cv.put("TITLE", item.getTitle());
-            cv.put("CONTENT", item.getContent());
-            cv.put("LONGITUDE", item.getLatLng().longitude);
-            cv.put("LATITUDE", item.getLatLng().latitude);
-            sqLiteDB.insert("LIST", null, cv);
+                ContentValues cv = new ContentValues();
+                cv.put("ID", key);
+                cv.put("IMG", item.getImg());
+                cv.put("TITLE", item.getTitle());
+                cv.put("CONTENT", item.getContent());
+                cv.put("LONGITUDE", item.getLatLng().longitude);
+                cv.put("LATITUDE", item.getLatLng().latitude);
+                sqLiteDB.insert("LIST", null, cv);
 
-            page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
-            MapFragment mapFragment = (MapFragment) page;
-            mapFragment.addMarker(item.getLatLng(), key);
+                page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
+                MapFragment mapFragment = (MapFragment) page;
+                mapFragment.addMarker(item.getLatLng(), key);
+            } else if (requestCode == REQUEST_INFO) {
+                String id = data.getStringExtra("id");
+                System.out.println(id);
+                sqLiteDB.execSQL("DELETE FROM LIST WHERE ID = '" + id + "'");
+
+                Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
+                MyListFragment listFragment = (MyListFragment) page;
+                listFragment.deleteData(id);
+
+                page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
+                MapFragment mapFragment = (MapFragment) page;
+                mapFragment.deleteMarker(id);
+
+                // toast 띄워주기
+                Toast toast = Toast.makeText(this, "삭제되었습니다.", Toast.LENGTH_SHORT);
+                toast.show();
+            } else {
+                // toast 띄워주기
+                Toast toast = Toast.makeText(this, "오류가 발생했습니다.", Toast.LENGTH_SHORT);
+                toast.show();
+            }
         } else {
             // toast 띄워주기
             Toast toast = Toast.makeText(this, "오류가 발생했습니다.", Toast.LENGTH_SHORT);

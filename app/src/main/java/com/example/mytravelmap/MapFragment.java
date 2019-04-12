@@ -16,8 +16,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
 public class MapFragment extends Fragment
         implements OnMapReadyCallback {
+    private ArrayList<Marker> markers = new ArrayList<Marker>();
+
     private Bundle mBundle;
     private View mView;
     private GoogleMap mMap = null;
@@ -26,6 +30,7 @@ public class MapFragment extends Fragment
 
     public interface MapInterface {
         void moveInfo(String id);
+
         void addFirst(GoogleMap map);
     }
 
@@ -128,7 +133,7 @@ public class MapFragment extends Fragment
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                mMapInterface.moveInfo((String)marker.getTag());
+                mMapInterface.moveInfo((String) marker.getTag());
                 return false;
             }
         });
@@ -141,6 +146,21 @@ public class MapFragment extends Fragment
 
     void addMarker(LatLng latLng, String key) {
         Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
+
         marker.setTag(key);
+
+        markers.add(marker);
+    }
+
+    void deleteMarker(String id) {
+        int index = 0;
+        for (Marker marker : markers) {
+            if (marker.getTag().equals(id)) {
+                marker.remove();
+                markers.remove(index);
+                break;
+            }
+            index++;
+        }
     }
 }

@@ -1,8 +1,10 @@
 package com.example.mytravelmap;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,9 +19,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class InfoActivity extends FragmentActivity
         implements OnMapReadyCallback {
     private GoogleMap mMap;
-    private ListViewItem item;
     private LatLng latLng;
     private String id;
+    private ListViewItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,8 @@ public class InfoActivity extends FragmentActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        ListViewItem item = (ListViewItem) getIntent().getSerializableExtra("item");
+        item = (ListViewItem) getIntent().getSerializableExtra("item");
+        System.out.println("create: " + item.getId());
 
         ImageView imageView = findViewById(R.id.imageView);
         TextView title = findViewById(R.id.textview_info_title);
@@ -52,5 +55,17 @@ public class InfoActivity extends FragmentActivity
         Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
         marker.setTag(id);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+    }
+
+    public void share() {
+
+    }
+
+    public void delete(View v) {
+        Intent intent = new Intent();
+        intent.putExtra("id", item.getId());
+        System.out.println(item.getId());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

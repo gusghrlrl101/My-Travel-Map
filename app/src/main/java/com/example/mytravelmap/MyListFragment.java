@@ -24,6 +24,7 @@ public class MyListFragment extends Fragment {
 
     public interface ListInterface {
         void moveInfo(String id);
+
         void addFirst(ListViewAdapter adapter);
     }
 
@@ -79,6 +80,17 @@ public class MyListFragment extends Fragment {
     void addData(String img, String title, String content, LatLng latLng, String id) {
         adapter.addData(img, title, content, latLng, id);
 
+        // UI 변경이므로 UI 쓰레드 상에서 실행
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    void deleteData(String id) {
+        adapter.deleteData(id);
         // UI 변경이므로 UI 쓰레드 상에서 실행
         getActivity().runOnUiThread(new Runnable() {
             @Override
