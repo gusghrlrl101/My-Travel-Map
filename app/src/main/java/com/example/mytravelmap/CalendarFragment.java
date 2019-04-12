@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateLongClickListener;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 
@@ -75,12 +76,12 @@ public class CalendarFragment extends Fragment {
         }
         calendarView.addDecorator(new Decorator(days));
 
-        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+        calendarView.setOnDateLongClickListener(new OnDateLongClickListener() {
             @Override
-            public void onDateSelected(@NonNull MaterialCalendarView materialCalendarView, @NonNull CalendarDay calendarDay, boolean b) {
-                selectedDay = calendarDay;
-                if (days.contains(calendarDay))
-                    gridView(calendarDay);
+            public void onDateLongClick(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date) {
+                selectedDay = date;
+                if (days.contains(date))
+                    gridView(date);
             }
         });
 
