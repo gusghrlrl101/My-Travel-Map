@@ -34,6 +34,7 @@ public class GridActivity extends AppCompatActivity {
                 ListViewItem item = (ListViewItem) parent.getItemAtPosition(position);
                 Intent intent = new Intent(getBaseContext(), InfoActivity.class);
                 intent.putExtra("item", item);
+                intent.putExtra("visiable", false);
                 startActivityForResult(intent, 50101);
             }
         });

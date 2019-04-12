@@ -17,9 +17,12 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
+import org.w3c.dom.CDATASection;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -28,6 +31,7 @@ import java.util.List;
 public class CalendarFragment extends Fragment {
     private MaterialCalendarView calendarView;
     private CalendarInterface calInterface;
+    private CalendarDay selectedDay = CalendarDay.today();
     final private List<CalendarDay> days = new ArrayList<>();
 
     public interface CalendarInterface {
@@ -74,6 +78,7 @@ public class CalendarFragment extends Fragment {
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView materialCalendarView, @NonNull CalendarDay calendarDay, boolean b) {
+                selectedDay = calendarDay;
                 if (days.contains(calendarDay))
                     gridView(calendarDay);
             }
@@ -87,11 +92,10 @@ public class CalendarFragment extends Fragment {
         String key = calendarDay.getDate().format(formatter);
 
         ArrayList<ListViewItem> list = calInterface.getList(key);
-        System.out.println("===============" + list.size());
 
         Intent intent = new Intent(getActivity(), GridActivity.class);
         intent.putExtra("list", list);
-        startActivityForResult(intent, 100);
+        startActivityForResult(intent, 5111);
     }
 
     public void addItem(String id) {
@@ -120,5 +124,19 @@ public class CalendarFragment extends Fragment {
 
         calendarView.removeDecorators();
         calendarView.addDecorator(new Decorator(days));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            getActivity().finishAffinity();
+        }
+    }
+
+    public String getDay() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String day = selectedDay.getDate().format(formatter);
+
+        return day;
     }
 }

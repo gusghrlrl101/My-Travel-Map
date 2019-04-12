@@ -38,6 +38,7 @@ public class AddItemActivity extends AppCompatActivity
     private Drawable buttonImg;
     private GoogleMap map;
     private Marker marker = null;
+    private boolean past;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,8 @@ public class AddItemActivity extends AppCompatActivity
                 PickImageHelper.selectImage(AddItemActivity.this);
             }
         });
+
+        past = getIntent().getBooleanExtra("past", false);
     }
 
     @Override
@@ -63,7 +66,6 @@ public class AddItemActivity extends AppCompatActivity
 
         if (resultCode == RESULT_OK) {
             Uri imageUri = PickImageHelper.getPickImageResultUri(this, data);
-            System.out.println("#####" + imageUri);
             try {
                 InputStream is = this.getContentResolver().openInputStream(imageUri);
                 BitmapFactory.Options options = new BitmapFactory.Options();
@@ -75,7 +77,6 @@ public class AddItemActivity extends AppCompatActivity
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            System.out.println("#####" + buttonImg);
         }
     }
 
@@ -157,6 +158,7 @@ public class AddItemActivity extends AppCompatActivity
 
         Intent intent = new Intent();
         intent.putExtra("item", item);
+        intent.putExtra("past", past);
         setResult(RESULT_OK, intent);
         finish();
     }

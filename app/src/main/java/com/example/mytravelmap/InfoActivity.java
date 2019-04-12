@@ -10,6 +10,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import com.kakao.network.ErrorResult;
 import com.kakao.network.callback.ResponseCallback;
 import com.kakao.util.helper.log.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -53,11 +55,15 @@ public class InfoActivity extends FragmentActivity
         mapFragment.getMapAsync(this);
 
         item = (ListViewItem) getIntent().getSerializableExtra("item");
-        System.out.println("create: " + item.getId());
+        boolean visiable = getIntent().getBooleanExtra("visiable", false);
 
         ImageView imageView = findViewById(R.id.imageView);
         TextView title = findViewById(R.id.textview_info_title);
         TextView content = findViewById(R.id.textview_info_content);
+        if (!visiable) {
+            Button button = findViewById(R.id.delete);
+            button.setVisibility(View.INVISIBLE);
+        }
 
         latLng = item.getLatLng();
         id = item.getId();

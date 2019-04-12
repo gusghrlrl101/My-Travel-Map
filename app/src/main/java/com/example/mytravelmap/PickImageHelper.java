@@ -29,8 +29,6 @@ public class PickImageHelper {
         if (file.exists())
             file.delete();
 
-        System.out.println("####" + file);
-
         List<Intent> allIntents = new ArrayList<>();
         PackageManager packageManager = activity.getPackageManager();
 
@@ -41,10 +39,10 @@ public class PickImageHelper {
             Intent intent = new Intent(captureIntent);
             intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
             intent.setPackage(res.activityInfo.packageName);
-            if (outputFileUri != null) {
+
+            if (outputFileUri != null)
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-                System.out.println("####" + outputFileUri);
-            }
+
             allIntents.add(intent);
         }
 

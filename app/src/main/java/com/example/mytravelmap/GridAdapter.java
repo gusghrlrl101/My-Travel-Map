@@ -46,8 +46,6 @@ public class GridAdapter extends BaseAdapter {
         // List로부터 Data 가져오기
         ListViewItem listViewItem = data.get(position);
 
-        System.out.println("%%%%%%%%%%%%%%%%%%");
-        System.out.println(position + ", " + listViewItem.getId() + ", " + listViewItem.getImg());
         // 해당하는 View에 데이터 삽입
         imgView.setImageDrawable(Drawable.createFromPath(listViewItem.getImg()));
 
