@@ -63,6 +63,7 @@ public class AddItemActivity extends AppCompatActivity
 
         if (resultCode == RESULT_OK) {
             Uri imageUri = PickImageHelper.getPickImageResultUri(this, data);
+            System.out.println("#####" + imageUri);
             try {
                 InputStream is = this.getContentResolver().openInputStream(imageUri);
                 BitmapFactory.Options options = new BitmapFactory.Options();
@@ -74,6 +75,7 @@ public class AddItemActivity extends AppCompatActivity
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+            System.out.println("#####" + buttonImg);
         }
     }
 

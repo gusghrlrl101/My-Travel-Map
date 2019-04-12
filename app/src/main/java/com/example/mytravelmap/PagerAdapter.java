@@ -15,9 +15,9 @@ public class PagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0)
-            return MyListFragment.newInstance();
-        else if (position == 1)
             return MapFragment.newInstance();
+        else if (position == 1)
+            return MyListFragment.newInstance();
         else if (position == 2)
             return MyFragment.newInstance();
         else
@@ -33,11 +33,11 @@ public class PagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0)
-            return "첫번째 탭";
+            return "지도";
         else if (position == 1)
-            return "두번째 탭";
+            return "목록";
         else if (position == 2)
-            return "세번째 탭";
+            return "달력";
         else
             return null;
     }

@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -26,6 +27,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static com.kakao.util.helper.Utility.getKeyHash;
 
 public class MainActivity extends AppCompatActivity
         implements MapFragment.MapInterface, MyListFragment.ListInterface {
@@ -43,6 +46,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d("MAIN", getKeyHash(this));
 
         for (int i = 0; i < permissions.length; i++) {
             if (ActivityCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
@@ -81,7 +86,6 @@ public class MainActivity extends AppCompatActivity
             sqLiteDB = SQLiteDatabase.openOrCreateDatabase(DB_PATH + "hyunho.db", null);
             sqLiteDB.execSQL("CREATE TABLE IF NOT EXISTS " +
                     "LIST (ID TEXT PRIMARY KEY, IMG TEXT, TITLE TEXT, CONTENT TEXT, LONGITUDE DOUBLE, LATITUDE DOUBLE)");
-
         }
     }
 
@@ -155,7 +159,7 @@ public class MainActivity extends AppCompatActivity
 
                 ListViewItem item = (ListViewItem) data.getSerializableExtra("item");
 
-                Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
+                Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
                 MyListFragment listFragment = (MyListFragment) page;
 
                 listFragment.addData(item.getImg(), item.getTitle(), item.getContent(), item.getLatLng(), key);
@@ -169,7 +173,7 @@ public class MainActivity extends AppCompatActivity
                 cv.put("LATITUDE", item.getLatLng().latitude);
                 sqLiteDB.insert("LIST", null, cv);
 
-                page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
+                page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
                 MapFragment mapFragment = (MapFragment) page;
                 mapFragment.addMarker(item.getLatLng(), key);
             } else if (requestCode == REQUEST_INFO) {
@@ -177,11 +181,11 @@ public class MainActivity extends AppCompatActivity
                 System.out.println(id);
                 sqLiteDB.execSQL("DELETE FROM LIST WHERE ID = '" + id + "'");
 
-                Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
+                Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
                 MyListFragment listFragment = (MyListFragment) page;
                 listFragment.deleteData(id);
 
-                page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 1);
+                page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
                 MapFragment mapFragment = (MapFragment) page;
                 mapFragment.deleteMarker(id);
 
@@ -193,13 +197,8 @@ public class MainActivity extends AppCompatActivity
                 Toast toast = Toast.makeText(this, "오류가 발생했습니다.", Toast.LENGTH_SHORT);
                 toast.show();
             }
-        } else {
-            // toast 띄워주기
-            Toast toast = Toast.makeText(this, "오류가 발생했습니다.", Toast.LENGTH_SHORT);
-            toast.show();
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

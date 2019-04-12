@@ -43,6 +43,7 @@ public class PickImageHelper {
             intent.setPackage(res.activityInfo.packageName);
             if (outputFileUri != null) {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+                System.out.println("####" + outputFileUri);
             }
             allIntents.add(intent);
         }
@@ -69,7 +70,7 @@ public class PickImageHelper {
         allIntents.remove(mainIntent);
 
         // Create a chooser from the main intent
-        Intent chooserIntent = Intent.createChooser(mainIntent, "Obter imagem");
+        Intent chooserIntent = Intent.createChooser(mainIntent, "사진 선택");
 
         // Add all other intents
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, allIntents.toArray(new Parcelable[allIntents.size()]));
