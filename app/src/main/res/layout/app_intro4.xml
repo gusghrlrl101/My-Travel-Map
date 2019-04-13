@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="10"
+    android:background="#b75444"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/DetailInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:paddingLeft="32dp"
+        android:paddingRight="29dp"
+        android:text="Calendar Information"
+        android:textColor="#ffffff"
+        android:textSize="27sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingLeft="16dp"
+            android:tint="#c1e6f5"
+            android:paddingRight="16dp"
+            android:src="@drawable/camera" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:paddingLeft="64dp"
+        android:paddingRight="64dp"
+        android:text="기록이 있는 날짜는 점이 찍혀있습니다.\n점이 있는 곳을 길게 터치하면 사진을 볼 수 있습니다.\n날짜를 선택하고 + 버튼을 누르면 과거의 기록을 저장할 수 있습니다."
+        android:textColor="#ffffff"
+        android:textSize="16sp" />
+
+</LinearLayout>
+

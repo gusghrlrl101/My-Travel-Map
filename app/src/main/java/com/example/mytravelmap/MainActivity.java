@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -53,50 +54,64 @@ public class MainActivity extends AppCompatActivity
     private PagerAdapter mPagerAdapter;
     private boolean isGranted = true;
 
+    public boolean isFirstStart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        System.out.println("@@@main create");
         Log.d("MAIN", getKeyHash(this));
 
-        for (int i = 0; i < permissions.length; i++) {
-            if (ActivityCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
-                isGranted = false;
-                requestPermissions(permissions, MY_PERMISSION);
-                break;
-            }
-        }
+        SharedPreferences getSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        isFirstStart = getSharedPreferences.getBoolean("firstStart", true);
 
-        if (isGranted) {
-            mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
-            mViewPager = (ViewPager) findViewById(R.id.viewpager);
-            mViewPager.setOffscreenPageLimit(3);
-            mViewPager.setAdapter(mPagerAdapter);
-
-            TabLayout mTab = (TabLayout) findViewById(R.id.tabs);
-            mTab.setupWithViewPager(mViewPager);
-
-            FloatingActionButton myFab = findViewById(R.id.fab);
-            myFab.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    addItem();
+        if (isFirstStart) {
+            Intent intent = new Intent(this, IntroActivity.class);
+            startActivity(intent);
+            SharedPreferences.Editor e = getSharedPreferences.edit();
+            e.putBoolean("firstStart", false);
+            e.apply();
+        } else {
+            for (int i = 0; i < permissions.length; i++) {
+                if (ActivityCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                    isGranted = false;
+                    requestPermissions(permissions, MY_PERMISSION);
+                    break;
                 }
-            });
+            }
 
-            String DB_PATH;
-            if (android.os.Build.VERSION.SDK_INT >= 4.2)
-                DB_PATH = getApplicationInfo().dataDir + "/databases/";
-            else
-                DB_PATH = "/data/data/" + getPackageName() + "/databases/";
+            if (isGranted) {
+                mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+                mViewPager = (ViewPager) findViewById(R.id.viewpager);
+                mViewPager.setOffscreenPageLimit(3);
+                mViewPager.setAdapter(mPagerAdapter);
 
-            File db_dir = new File(DB_PATH);
-            if (!db_dir.exists())
-                db_dir.mkdirs();
+                TabLayout mTab = (TabLayout) findViewById(R.id.tabs);
+                mTab.setupWithViewPager(mViewPager);
 
-            sqLiteDB = SQLiteDatabase.openOrCreateDatabase(DB_PATH + "hyunho.db", null);
-            sqLiteDB.execSQL("CREATE TABLE IF NOT EXISTS " +
-                    "LIST (ID TEXT PRIMARY KEY, IMG TEXT, TITLE TEXT, CONTENT TEXT, LONGITUDE DOUBLE, LATITUDE DOUBLE)");
+                FloatingActionButton myFab = findViewById(R.id.fab);
+                myFab.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        addItem();
+                    }
+                });
+
+                String DB_PATH;
+                if (android.os.Build.VERSION.SDK_INT >= 4.2)
+                    DB_PATH = getApplicationInfo().dataDir + "/databases/";
+                else
+                    DB_PATH = "/data/data/" + getPackageName() + "/databases/";
+
+                File db_dir = new File(DB_PATH);
+                if (!db_dir.exists())
+                    db_dir.mkdirs();
+
+                sqLiteDB = SQLiteDatabase.openOrCreateDatabase(DB_PATH + "hyunho.db", null);
+                sqLiteDB.execSQL("CREATE TABLE IF NOT EXISTS " +
+                        "LIST (ID TEXT PRIMARY KEY, IMG TEXT, TITLE TEXT, CONTENT TEXT, LONGITUDE DOUBLE, LATITUDE DOUBLE)");
+            }
         }
     }
 
@@ -130,6 +145,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public ArrayList<Marker> addFirst(GoogleMap map) {
+        System.out.println("@@@map addfirst");
         String select = "SELECT * FROM LIST";
         Cursor cursor = sqLiteDB.rawQuery(select, null);
 
@@ -139,6 +155,7 @@ public class MainActivity extends AppCompatActivity
             double longitude = cursor.getDouble(cursor.getColumnIndex("LONGITUDE"));
             double latitude = cursor.getDouble(cursor.getColumnIndex("LATITUDE"));
             String id = cursor.getString(cursor.getColumnIndex("ID"));
+            System.out.println("@@@"+ id);
 
             LatLng latLng = new LatLng(latitude, longitude);
             Marker marker = map.addMarker(new MarkerOptions().position(latLng));
@@ -154,7 +171,7 @@ public class MainActivity extends AppCompatActivity
         String select = "SELECT * FROM LIST";
         Cursor cursor = sqLiteDB.rawQuery(select, null);
 
-        System.out.println("@@@ ADD FIRST\n@@@");
+        System.out.println("@@@list addfirst");
         while (cursor.moveToNext()) {
             String img = cursor.getString(cursor.getColumnIndex("IMG"));
             String title = cursor.getString(cursor.getColumnIndex("TITLE"));
@@ -162,7 +179,6 @@ public class MainActivity extends AppCompatActivity
             double longitude = cursor.getDouble(cursor.getColumnIndex("LONGITUDE"));
             double latitude = cursor.getDouble(cursor.getColumnIndex("LATITUDE"));
             String id = cursor.getString(cursor.getColumnIndex("ID"));
-            System.out.println("@@@ " + id);
 
             LatLng latLng = new LatLng(latitude, longitude);
             adapter.addData(img, title, content, latLng, id);
@@ -288,7 +304,6 @@ public class MainActivity extends AppCompatActivity
         page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 0);
         MapFragment mapFragment = (MapFragment) page;
         mapFragment.addMarker(item.getLatLng(), key);
-
 
         page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + 2);
         CalendarFragment calendarFragment = (CalendarFragment) page;

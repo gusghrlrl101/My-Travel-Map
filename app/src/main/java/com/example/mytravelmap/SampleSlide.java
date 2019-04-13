@@ -1,5 +1,6 @@
 package com.example.mytravelmap;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -7,9 +8,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 public class SampleSlide extends Fragment {
-
     private static final String ARG_LAYOUT_RES_ID = "layoutResId";
     private int layoutResId;
 
@@ -27,9 +28,8 @@ public class SampleSlide extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null && getArguments().containsKey(ARG_LAYOUT_RES_ID)) {
+        if (getArguments() != null && getArguments().containsKey(ARG_LAYOUT_RES_ID))
             layoutResId = getArguments().getInt(ARG_LAYOUT_RES_ID);
-        }
     }
 
     @Nullable

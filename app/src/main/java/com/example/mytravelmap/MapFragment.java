@@ -55,6 +55,7 @@ public class MapFragment extends Fragment
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        System.out.println("@@@map create");
         super.onCreate(mBundle);
         mBundle = savedInstanceState;
     }
@@ -126,6 +127,7 @@ public class MapFragment extends Fragment
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        System.out.println("@@@map ready");
         mMap = googleMap;
         // 현재 위치 버튼 사용
         mMap.setMyLocationEnabled(true);

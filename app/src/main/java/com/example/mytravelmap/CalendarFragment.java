@@ -76,6 +76,12 @@ public class CalendarFragment extends Fragment {
         }
         calendarView.addDecorator(new Decorator(days));
 
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                selectedDay = date;
+            }
+        });
         calendarView.setOnDateLongClickListener(new OnDateLongClickListener() {
             @Override
             public void onDateLongClick(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date) {
