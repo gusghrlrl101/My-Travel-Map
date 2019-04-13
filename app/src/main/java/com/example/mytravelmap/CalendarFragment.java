@@ -15,10 +15,8 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateLongClickListener;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
-import org.w3c.dom.CDATASection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +28,12 @@ import static android.app.Activity.RESULT_OK;
  * A simple {@link Fragment} subclass.
  */
 public class CalendarFragment extends Fragment {
+    final private List<CalendarDay> days = new ArrayList<>();
     private MaterialCalendarView calendarView;
     private CalendarInterface calInterface;
     private CalendarDay selectedDay = CalendarDay.today();
-    final private List<CalendarDay> days = new ArrayList<>();
 
-    public interface CalendarInterface {
-        List<LocalDate> getDates();
-
-        ArrayList<ListViewItem> getList(String key);
+    public CalendarFragment() {
     }
 
     public static CalendarFragment newInstance() {
@@ -46,9 +41,6 @@ public class CalendarFragment extends Fragment {
         CalendarFragment fragment = new CalendarFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public CalendarFragment() {
     }
 
     @Override
@@ -151,5 +143,11 @@ public class CalendarFragment extends Fragment {
         String day = selectedDay.getDate().format(formatter);
 
         return day;
+    }
+
+    public interface CalendarInterface {
+        List<LocalDate> getDates();
+
+        ArrayList<ListViewItem> getList(String key);
     }
 }

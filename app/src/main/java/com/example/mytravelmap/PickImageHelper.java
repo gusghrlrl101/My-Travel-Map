@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PickImageHelper {
-    public static void selectImage(final Activity activity){
+    public static void selectImage(final Activity activity) {
         activity.startActivityForResult(getPickImageChooserIntent(activity), 9162);
     }
 
@@ -25,7 +25,7 @@ public class PickImageHelper {
         // Determine Uri of camera image to save.
         Uri outputFileUri = getCaptureImageOutputUri(activity);
 
-        File file = new File(getRealPathFromURI(activity,outputFileUri));
+        File file = new File(getRealPathFromURI(activity, outputFileUri));
         if (file.exists())
             file.delete();
 
@@ -104,9 +104,9 @@ public class PickImageHelper {
     public static String getRealPathFromURI(Activity activity, Uri contentUri) {
         String result;
         Cursor cursor = activity.getContentResolver().query(contentUri, null, null, null, null);
-        if (cursor == null) {
+        if (cursor == null)
             result = contentUri.getPath();
-        } else {
+        else {
             cursor.moveToFirst();
             int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
             result = cursor.getString(idx);

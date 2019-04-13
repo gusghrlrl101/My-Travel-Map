@@ -1,6 +1,7 @@
 package com.example.mytravelmap;
 
 import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 
 public class ListViewItem
@@ -12,7 +13,6 @@ public class ListViewItem
     private double latitude;
     private String id;
 
-    // 생성자
     public ListViewItem(String img, String title, String content, LatLng latLng, String id) {
         this.img = img;
         this.title = title;

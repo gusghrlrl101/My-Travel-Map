@@ -7,9 +7,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -48,7 +48,6 @@ public class AddItemActivity extends AppCompatActivity
         // Map 프래그먼트 연결
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
         // ImageButton
         imageButton = (ImageButton) findViewById(R.id.imageButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +56,6 @@ public class AddItemActivity extends AppCompatActivity
                 PickImageHelper.selectImage(AddItemActivity.this);
             }
         });
-
         // 달력에서 과거를 선택한 경우
         past = getIntent().getBooleanExtra("past", false);
     }
@@ -112,11 +110,9 @@ public class AddItemActivity extends AppCompatActivity
         map = googleMap;
         // 현재 위치 버튼 사용
         map.setMyLocationEnabled(true);
-
         // 기본 시점 이동
         LatLng korea = new LatLng(37.450601, 126.657318);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(korea, 6));
-
         // 지도 클릭 리스너
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override

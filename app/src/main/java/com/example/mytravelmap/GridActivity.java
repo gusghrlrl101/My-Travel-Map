@@ -1,19 +1,13 @@
 package com.example.mytravelmap;
 
-import android.content.Context;
 import android.content.Intent;
-import android.icu.text.IDNA;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GridActivity extends AppCompatActivity {
     @Override

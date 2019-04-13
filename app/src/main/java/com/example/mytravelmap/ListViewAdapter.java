@@ -15,10 +15,8 @@ import java.util.ArrayList;
 
 
 public class ListViewAdapter extends BaseAdapter {
-    // 저장할 데이터
     private ArrayList<ListViewItem> data = new ArrayList<ListViewItem>();
 
-    // 기본 생성자
     public ListViewAdapter() {
     }
 
@@ -39,20 +37,17 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //  convertView에 "listview_item" Layout을 inflate 하기
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.listview_item, parent, false);
         }
 
         // 해당하는 id의 View 불러오기
-        ImageView imgView = (ImageView) convertView.findViewById(R.id.list_img);
-        TextView titleView = (TextView) convertView.findViewById(R.id.list_title);
-        TextView contentView = (TextView) convertView.findViewById(R.id.list_content);
-
+        ImageView imgView = convertView.findViewById(R.id.list_img);
+        TextView titleView = convertView.findViewById(R.id.list_title);
+        TextView contentView = convertView.findViewById(R.id.list_content);
         // List로부터 Data 가져오기
         ListViewItem listViewItem = data.get(position);
-
         // 해당하는 View에 데이터 삽입
         imgView.setImageDrawable(Drawable.createFromPath(listViewItem.getImg()));
         titleView.setText(listViewItem.getTitle());
@@ -61,11 +56,6 @@ public class ListViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public ArrayList<ListViewItem> getData() {
-        return data;
-    }
-
-    // List에 데이터 추가하기
     void addData(String img, String title, String content, LatLng latLng, String id) {
         ListViewItem item = new ListViewItem(img, title, content, latLng, id);
         data.add(item);

@@ -23,23 +23,14 @@ public class MyListFragment extends Fragment {
     private ListView listView = null;
     private ListInterface mListInterface;
 
-    public interface ListInterface {
-        void moveInfo(String id);
-
-        void addFirst(ListViewAdapter adapter);
+    public MyListFragment() {
     }
 
     public static MyListFragment newInstance() {
         Bundle args = new Bundle();
-
         MyListFragment fragment = new MyListFragment();
         fragment.setArguments(args);
-
         return fragment;
-    }
-
-    public MyListFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -56,18 +47,14 @@ public class MyListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.fragment_my_list, container, false);
-
+        // 어댑터에 뷰 연결
         adapter = new ListViewAdapter();
-        listView = (ListView) layout.findViewById(R.id.listview);
+        listView = layout.findViewById(R.id.listview);
         listView.setAdapter(adapter);
-
+        // 리스트뷰가 빈 경우 텍스트뷰 연결
         TextView textView = layout.findViewById(R.id.empty_text);
         listView.setEmptyView(textView);
-
-        mListInterface.addFirst(adapter);
-
         // List Click Listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -78,12 +65,15 @@ public class MyListFragment extends Fragment {
             }
         });
 
+        // 저장된 리스트 불러오기
+        mListInterface.addFirst(adapter);
+
         return layout;
     }
 
     void addData(String img, String title, String content, LatLng latLng, String id) {
+        // 어뎁터로 리스트에 데이터 추가
         adapter.addData(img, title, content, latLng, id);
-
         // UI 변경이므로 UI 쓰레드 상에서 실행
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -94,6 +84,7 @@ public class MyListFragment extends Fragment {
     }
 
     void deleteData(String id) {
+        // 어뎁터로 리스트의 데이터 삭제
         adapter.deleteData(id);
         // UI 변경이므로 UI 쓰레드 상에서 실행
         getActivity().runOnUiThread(new Runnable() {
@@ -102,5 +93,11 @@ public class MyListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public interface ListInterface {
+        void moveInfo(String id);
+
+        void addFirst(ListViewAdapter adapter);
     }
 }

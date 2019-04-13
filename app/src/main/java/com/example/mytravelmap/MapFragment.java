@@ -20,31 +20,21 @@ import java.util.ArrayList;
 
 public class MapFragment extends Fragment
         implements OnMapReadyCallback {
+    public MapInterface mMapInterface;
     private ArrayList<Marker> markers;
-
     private Bundle mBundle;
     private View mView;
     private GoogleMap mMap = null;
     private MapView mapView = null;
-    public MapInterface mMapInterface;
 
-    public interface MapInterface {
-        void moveInfo(String id);
-
-        ArrayList<Marker> addFirst(GoogleMap map);
+    public MapFragment() {
     }
 
     public static MapFragment newInstance() {
         Bundle args = new Bundle();
-
         MapFragment fragment = new MapFragment();
         fragment.setArguments(args);
-
         return fragment;
-    }
-
-    public MapFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -55,7 +45,6 @@ public class MapFragment extends Fragment
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        System.out.println("@@@map create");
         super.onCreate(mBundle);
         mBundle = savedInstanceState;
     }
@@ -64,7 +53,7 @@ public class MapFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_map, container, false);
-        mapView = (MapView) mView.findViewById(R.id.map);
+        mapView = mView.findViewById(R.id.map);
         mapView.getMapAsync(this);
         return mView;
     }
@@ -127,7 +116,6 @@ public class MapFragment extends Fragment
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        System.out.println("@@@map ready");
         mMap = googleMap;
         // 현재 위치 버튼 사용
         mMap.setMyLocationEnabled(true);
@@ -139,22 +127,22 @@ public class MapFragment extends Fragment
                 return false;
             }
         });
-
+        // 저장된 마커 적용
         markers = mMapInterface.addFirst(mMap);
-
-        LatLng inha = new LatLng(37.450601, 126.657318);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(inha, 7));
+        // 카메라 시점 이동
+        LatLng korea = new LatLng(37.450601, 126.657318);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(korea, 7));
     }
 
     void addMarker(LatLng latLng, String key) {
+        // 마커에 key 저장하여 추가
         Marker marker = mMap.addMarker(new MarkerOptions().position(latLng));
-
         marker.setTag(key);
-
         markers.add(marker);
     }
 
     void deleteMarker(String id) {
+        // id 찾아서 해당 마커 제거
         int index = 0;
         for (Marker marker : markers) {
             if (marker.getTag().equals(id)) {
@@ -164,5 +152,11 @@ public class MapFragment extends Fragment
             }
             index++;
         }
+    }
+
+    public interface MapInterface {
+        void moveInfo(String id);
+
+        ArrayList<Marker> addFirst(GoogleMap map);
     }
 }
