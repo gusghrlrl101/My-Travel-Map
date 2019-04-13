@@ -24,6 +24,12 @@ allprojects {
         maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
         maven { url 'https://jitpack.io' }
     }
+
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:deprecation"
+        }
+    }
 }
 
 task clean(type: Delete) {

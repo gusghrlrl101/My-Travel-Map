@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mylist_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyListFragment"
-    android:id="@+id/mylist_fragment">
+    android:background="@color/background"
+    tools:context=".MyListFragment">
 
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/empty_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="항목을 추가하세요!"
+        android:visibility="gone" />
 </FrameLayout>

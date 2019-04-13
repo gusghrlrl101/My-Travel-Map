@@ -61,18 +61,23 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        System.out.println("@@@main create");
         Log.d("MAIN", getKeyHash(this));
 
         SharedPreferences getSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         isFirstStart = getSharedPreferences.getBoolean("firstStart", true);
+        boolean isDone = getIntent().getBooleanExtra("done", false);
 
-        if (isFirstStart) {
-            Intent intent = new Intent(this, IntroActivity.class);
-            startActivity(intent);
+        if (isDone) {
+            isFirstStart = false;
             SharedPreferences.Editor e = getSharedPreferences.edit();
             e.putBoolean("firstStart", false);
             e.apply();
+        }
+
+        if (isFirstStart) {
+            Intent intent = new Intent(this, IntroActivity.class);
+            finishAffinity();
+            startActivity(intent);
         } else {
             for (int i = 0; i < permissions.length; i++) {
                 if (ActivityCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
@@ -113,6 +118,7 @@ public class MainActivity extends AppCompatActivity
                         "LIST (ID TEXT PRIMARY KEY, IMG TEXT, TITLE TEXT, CONTENT TEXT, LONGITUDE DOUBLE, LATITUDE DOUBLE)");
             }
         }
+
     }
 
     private void addItem() {
@@ -155,7 +161,7 @@ public class MainActivity extends AppCompatActivity
             double longitude = cursor.getDouble(cursor.getColumnIndex("LONGITUDE"));
             double latitude = cursor.getDouble(cursor.getColumnIndex("LATITUDE"));
             String id = cursor.getString(cursor.getColumnIndex("ID"));
-            System.out.println("@@@"+ id);
+            System.out.println("@@@" + id);
 
             LatLng latLng = new LatLng(latitude, longitude);
             Marker marker = map.addMarker(new MarkerOptions().position(latLng));
@@ -220,7 +226,9 @@ public class MainActivity extends AppCompatActivity
         // 허락한 경우 액티비티 재생성
         if (allGranted) {
             isGranted = true;
-            recreate();
+            finishAffinity();
+            Intent intent = getIntent();
+            startActivity(intent);
         }
     }
 

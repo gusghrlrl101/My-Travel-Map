@@ -21,16 +21,19 @@ public class GridActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
 
+        // 리스트 받아오기
         ArrayList<ListViewItem> list = (ArrayList<ListViewItem>) getIntent().getSerializableExtra("list");
 
+        // 어댑터를 뷰에 연결
         GridAdapter adapter = new GridAdapter(list);
-        GridView gridView = (GridView) findViewById(R.id.gridView);
+        GridView gridView = findViewById(R.id.gridView);
         gridView.setAdapter(adapter);
 
-        // List Click Listener
+        // 항목 클릭 리스너
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Info 액티비티로 이동, visiable을 false로 하여 삭제 버튼 비활성
                 ListViewItem item = (ListViewItem) parent.getItemAtPosition(position);
                 Intent intent = new Intent(getBaseContext(), InfoActivity.class);
                 intent.putExtra("item", item);

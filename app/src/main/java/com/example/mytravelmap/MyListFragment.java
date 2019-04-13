@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -61,6 +62,9 @@ public class MyListFragment extends Fragment {
         adapter = new ListViewAdapter();
         listView = (ListView) layout.findViewById(R.id.listview);
         listView.setAdapter(adapter);
+
+        TextView textView = layout.findViewById(R.id.empty_text);
+        listView.setEmptyView(textView);
 
         mListInterface.addFirst(adapter);
 

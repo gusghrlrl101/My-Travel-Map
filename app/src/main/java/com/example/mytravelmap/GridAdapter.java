@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 public class GridAdapter extends BaseAdapter {
-    // 저장할 데이터
     private ArrayList<ListViewItem> data;
 
     public GridAdapter(ArrayList<ListViewItem> data) {
@@ -41,7 +40,7 @@ public class GridAdapter extends BaseAdapter {
         }
 
         // 해당하는 id의 View 불러오기
-        ImageView imgView = (ImageView) convertView.findViewById(R.id.grid_imageview);
+        ImageView imgView = convertView.findViewById(R.id.grid_imageview);
 
         // List로부터 Data 가져오기
         ListViewItem listViewItem = data.get(position);

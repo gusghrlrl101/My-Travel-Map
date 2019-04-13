@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:scrollbars="vertical"
-    tools:context=".GridActivity">
+    tools:context=".GridActivity"
+    android:background="@color/background">
 
     <GridView
         android:id="@+id/gridView"

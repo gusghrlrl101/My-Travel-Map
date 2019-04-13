@@ -4,10 +4,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_weight="10"
-    android:background="#0385a3"
+    android:background="#b75444"
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/DetailInformation"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center"
@@ -15,7 +16,7 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="29dp"
-        android:text="My Travel Map"
+        android:text="Calendar Information"
         android:textColor="#ffffff"
         android:textSize="27sp"
         android:textStyle="bold" />
@@ -27,15 +28,13 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        //image link from drawable folder
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:src="@drawable/mytravelmap" />
+            android:src="@drawable/intro5" />
     </LinearLayout>
 
     <TextView
@@ -46,7 +45,7 @@
         android:gravity="center"
         android:paddingLeft="64dp"
         android:paddingRight="64dp"
-        android:text="여행을 기록하세요!\n\n[ 설명을 꼭 읽어주세요 ]"
+        android:text="기록이 있는 날짜는 점이 찍혀있습니다.\n날짜를 선택하고 + 버튼을 누르면\n과거의 기록을 저장할 수 있습니다.\n점이 있는 곳을 길게 터치하면\n그 날 찍은 사진을 볼 수 있습니다.\n사진을 클릭하면 상세 정보를 조회할 수 있습니다."
         android:textColor="#ffffff"
         android:textSize="16sp" />
 
@@ -54,3 +53,4 @@
         android:layout_width="fill_parent"
         android:layout_height="62dp" />
 </LinearLayout>
+

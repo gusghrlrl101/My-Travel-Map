@@ -27,16 +27,20 @@ public class IntroActivity extends AppIntro {
         addSlide(SampleSlide.newInstance(R.layout.app_intro1));
         addSlide(SampleSlide.newInstance(R.layout.app_intro2));
         addSlide(SampleSlide.newInstance(R.layout.app_intro3));
+        addSlide(SampleSlide.newInstance(R.layout.app_intro4));
+        addSlide(SampleSlide.newInstance(R.layout.app_intro5));
 
         // OPTIONAL METHODS
         // Override bar/separator color.
-        setBarColor(Color.parseColor("#018786"));
+        setBarColor(Color.parseColor("#FFFFFF"));
         setSeparatorColor(Color.parseColor("#FFFFFF"));
-
+        setIndicatorColor(Color.parseColor("#000000"), Color.parseColor("#0000FF"));
+        setColorDoneText(Color.parseColor("#FF0000"));
+        setNextArrowColor(Color.parseColor("#0000FF"));
         setFadeAnimation();
 
         // Hide Skip/Done button.
-        showSkipButton(true);
+        showSkipButton(false);
         setProgressButtonEnabled(true);
     }
 
@@ -53,8 +57,9 @@ public class IntroActivity extends AppIntro {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
         Intent intent = new Intent(IntroActivity.this, MainActivity.class);
-        startActivity(intent);
         finish();
+        intent.putExtra("done", true);
+        startActivity(intent);
     }
 
     @Override
