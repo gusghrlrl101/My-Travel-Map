@@ -84,11 +84,11 @@ public class MainActivity extends AppCompatActivity
 
             if (isGranted) {
                 mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
-                mViewPager = (ViewPager) findViewById(R.id.viewpager);
+                mViewPager = findViewById(R.id.viewpager);
                 mViewPager.setOffscreenPageLimit(3);
                 mViewPager.setAdapter(mPagerAdapter);
 
-                TabLayout mTab = (TabLayout) findViewById(R.id.tabs);
+                TabLayout mTab = findViewById(R.id.tabs);
                 mTab.setupWithViewPager(mViewPager);
 
                 FloatingActionButton myFab = findViewById(R.id.fab);
@@ -146,7 +146,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public ArrayList<Marker> addFirst(GoogleMap map) {
-        System.out.println("@@@map addfirst");
         String select = "SELECT * FROM LIST";
         Cursor cursor = sqLiteDB.rawQuery(select, null);
 
@@ -156,7 +155,6 @@ public class MainActivity extends AppCompatActivity
             double longitude = cursor.getDouble(cursor.getColumnIndex("LONGITUDE"));
             double latitude = cursor.getDouble(cursor.getColumnIndex("LATITUDE"));
             String id = cursor.getString(cursor.getColumnIndex("ID"));
-            System.out.println("@@@" + id);
 
             LatLng latLng = new LatLng(latitude, longitude);
             Marker marker = map.addMarker(new MarkerOptions().position(latLng));
@@ -172,7 +170,6 @@ public class MainActivity extends AppCompatActivity
         String select = "SELECT * FROM LIST";
         Cursor cursor = sqLiteDB.rawQuery(select, null);
 
-        System.out.println("@@@list addfirst");
         while (cursor.moveToNext()) {
             String img = cursor.getString(cursor.getColumnIndex("IMG"));
             String title = cursor.getString(cursor.getColumnIndex("TITLE"));

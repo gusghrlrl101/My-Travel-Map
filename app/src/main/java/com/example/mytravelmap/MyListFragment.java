@@ -1,6 +1,5 @@
 package com.example.mytravelmap;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,10 +13,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class MyListFragment extends Fragment {
     private ListViewAdapter adapter;
     private ListView listView = null;

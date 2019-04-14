@@ -1,6 +1,5 @@
 package com.example.mytravelmap;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,10 +22,6 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class CalendarFragment extends Fragment {
     final private List<CalendarDay> days = new ArrayList<>();
     private MaterialCalendarView calendarView;

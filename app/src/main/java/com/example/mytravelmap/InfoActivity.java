@@ -46,13 +46,16 @@ public class InfoActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+
         // Map 프래그먼트 연결
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         // 인텐트로 부터 Data 받아오기
         item = (ListViewItem) getIntent().getSerializableExtra("item");
         boolean visiable = getIntent().getBooleanExtra("visiable", false);
+
         // 뷰에 Data 연결
         ImageView imageView = findViewById(R.id.imageView);
         TextView title = findViewById(R.id.textview_info_title);
@@ -60,11 +63,13 @@ public class InfoActivity extends FragmentActivity
         imageView.setImageDrawable(Drawable.createFromPath(item.getImg()));
         title.setText(item.getTitle());
         content.setText(item.getContent());
+
         // Grid 액티비티에서 온 경우 삭제버튼 비활성
         if (!visiable) {
             Button button = findViewById(R.id.delete);
             button.setVisibility(View.INVISIBLE);
         }
+
         // 좌표, id 저장
         latLng = item.getLatLng();
         id = item.getId();
