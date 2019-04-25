@@ -1,6 +1,6 @@
 # My-Travel-Map
 
-![Intro](./image/test2.gif)
+![Intro](./image/intro.gif)
 
 # Description
 
